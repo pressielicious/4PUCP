@@ -37,14 +37,14 @@ body{
 }
 
 .container{
-  max-width:900px;
+  max-width:1400px;
   margin:auto;
 }
 
 /* HEADER */
 .header{
   background:linear-gradient(135deg,var(--primary),var(--primary-dark));
-  padding:20px;
+  padding:18px;
   border-radius:20px;
   margin-bottom:14px;
   box-shadow:0 10px 30px rgba(90,0,0,0.25);
@@ -55,7 +55,7 @@ body{
 }
 
 .logo{
-  width:130px;
+  width:120px;
   height:auto;
   object-fit:contain;
 }
@@ -90,7 +90,7 @@ body{
 /* SEARCH */
 .search input{
   width:100%;
-  padding:13px;
+  padding:12px;
   border-radius:14px;
   border:none;
   outline:none;
@@ -103,7 +103,7 @@ body{
 /* PLAYERS */
 .players{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+  grid-template-columns:repeat(5,1fr);
   gap:8px;
 }
 
@@ -113,11 +113,13 @@ body{
   border-radius:12px;
   border-left:3px solid var(--primary-light);
   transition:0.15s ease;
-  min-height:72px;
+  min-height:68px;
   display:flex;
   flex-direction:column;
   justify-content:center;
   backdrop-filter:blur(6px);
+  position:relative;
+  overflow:hidden;
 }
 
 .player:hover{
@@ -126,7 +128,33 @@ body{
 
 .priority{
   border-left:3px solid #ff4444;
-  box-shadow:0 0 12px rgba(255,0,0,0.18);
+  box-shadow:0 0 14px rgba(255,0,0,0.18);
+}
+
+/* NEW PLAYER PULSE */
+.player.new::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:12px;
+  border:1px solid rgba(255,80,80,0.8);
+  animation:pulse 1.5s ease infinite;
+  pointer-events:none;
+}
+
+@keyframes pulse{
+  0%{
+    opacity:1;
+    transform:scale(1);
+  }
+  70%{
+    opacity:0;
+    transform:scale(1.03);
+  }
+  100%{
+    opacity:0;
+    transform:scale(1.05);
+  }
 }
 
 .name{
@@ -147,12 +175,6 @@ body{
   width:fit-content;
 }
 
-.uptime{
-  margin-top:5px;
-  font-size:11px;
-  color:#aaa;
-}
-
 .empty{
   text-align:center;
   color:var(--muted);
@@ -168,28 +190,38 @@ body{
 }
 
 /* RESPONSIVE */
-@media(max-width:900px){
+@media(max-width:1200px){
   .players{
-    grid-template-columns:repeat(2,1fr);
+    grid-template-columns:repeat(4,1fr);
   }
 }
 
-@media(max-width:600px){
+@media(max-width:900px){
+
+  .players{
+    grid-template-columns:repeat(3,1fr);
+  }
+}
+
+@media(max-width:700px){
 
   .grid{
     grid-template-columns:1fr;
   }
 
   .players{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:500px){
+
+  .players{
     grid-template-columns:1fr;
   }
 
   .logo{
-    width:110px;
-  }
-
-  .big{
-    font-size:22px;
+    width:100px;
   }
 }
 </style>
@@ -247,7 +279,8 @@ const priorityPlayers = [
   "4P | Tukiman"
 ];
 
-const onlineSince = {};
+/* TRACK NEW PLAYERS */
+const seenPlayers = {};
 
 function is4P(name){
   return /4P/i.test(String(name));
@@ -260,20 +293,6 @@ function getPlayers(data){
     data?.Data?.clients ||
     []
   );
-}
-
-function formatUptime(ms){
-
-  const total = Math.floor(ms / 1000);
-
-  const h = Math.floor(total / 3600);
-  const m = Math.floor((total % 3600) / 60);
-
-  if(h <= 0){
-    return `${m}m online`;
-  }
-
-  return `${h}h ${m}m online`;
 }
 
 function render(players){
@@ -290,10 +309,9 @@ function render(players){
     const priority = priorityPlayers.includes(p.name);
 
     return `
-      <div class="player ${priority ? 'priority' : ''}">
+      <div class="player ${priority ? 'priority' : ''} ${p.isNew ? 'new' : ''}">
         <div class="name">${p.name}</div>
         <div class="id">ID: ${p.id ?? 'N/A'}</div>
-        <div class="uptime">${p.uptime}</div>
       </div>
     `;
   }).join('');
@@ -309,8 +327,6 @@ async function load(){
 
     const playersRaw = getPlayers(data);
 
-    const now = Date.now();
-
     const filtered = playersRaw
 
       .map(p => ({
@@ -322,13 +338,13 @@ async function load(){
 
       .map(p => {
 
-        if(!onlineSince[p.name]){
-          onlineSince[p.name] = now;
-        }
+        const isNew = !seenPlayers[p.name];
+
+        seenPlayers[p.name] = true;
 
         return {
           ...p,
-          uptime: formatUptime(now - onlineSince[p.name])
+          isNew
         };
       })
 
