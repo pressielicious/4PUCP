@@ -1,9 +1,10 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>4P Tracker</title>
+<title>Tag Tracker</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
@@ -14,8 +15,7 @@
   --primary-dark:#3A0000;
   --bg:#090909;
   --card:#141414;
-  --text:#ffffff;
-  --muted:#9a9a9a;
+  --text:#fff;
 }
 
 *{
@@ -27,380 +27,235 @@
 body{
   font-family:Inter,sans-serif;
   background:
-    radial-gradient(circle at top, rgba(120,0,0,0.25), transparent 40%),
-    radial-gradient(circle at bottom right, rgba(90,0,0,0.18), transparent 35%),
+    radial-gradient(circle at top, rgba(120,0,0,.25), transparent 40%),
+    radial-gradient(circle at bottom right, rgba(90,0,0,.18), transparent 35%),
     linear-gradient(180deg,#090909,#050505);
-  background-attachment:fixed;
-  color:var(--text);
-  padding:16px;
-  overflow-x:hidden;
+  color:#fff;
+  min-height:100vh;
+  padding:20px;
 }
 
 .container{
-  max-width:1400px;
+  max-width:1200px;
   margin:auto;
 }
 
-/* HEADER */
 .header{
   background:linear-gradient(135deg,var(--primary),var(--primary-dark));
-  padding:18px;
+  padding:20px;
   border-radius:20px;
-  margin-bottom:14px;
-  box-shadow:0 10px 30px rgba(90,0,0,0.25);
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  text-align:center;
+  margin-bottom:20px;
+  box-shadow:0 10px 30px rgba(90,0,0,.25);
 }
 
 .logo{
   width:120px;
-  height:auto;
-  object-fit:contain;
+  max-width:100%;
 }
 
-/* GRID */
-.grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px;
-  margin-bottom:12px;
+.stats{
+  margin-bottom:20px;
 }
 
-.card{
-  background:rgba(20,20,20,0.9);
-  padding:14px;
+.stat-card{
+  text-decoration:none;
+  color:white;
+  display:block;
+  background:rgba(20,20,20,.9);
+  border:1px solid rgba(255,255,255,.05);
+  border-left:4px solid var(--primary-light);
   border-radius:16px;
-  border:1px solid rgba(255,255,255,0.04);
-  backdrop-filter:blur(6px);
+  padding:20px;
+  text-align:center;
+  transition:.15s ease;
+}
+
+.stat-card:hover{
+  transform:translateY(-3px);
+  background:rgba(30,30,30,.95);
 }
 
 .label{
-  font-size:11px;
-  color:var(--muted);
+  font-size:12px;
+  color:#999;
+  margin-bottom:8px;
+  text-transform:uppercase;
+  letter-spacing:.5px;
 }
 
-.big{
-  font-size:24px;
+.value{
+  font-size:36px;
   font-weight:700;
-  margin-top:6px;
 }
 
-/* SEARCH */
-.search input{
-  width:100%;
-  padding:12px;
-  border-radius:14px;
-  border:none;
-  outline:none;
-  background:rgba(20,20,20,0.9);
-  color:white;
-  margin-bottom:12px;
-  font-size:14px;
-}
-
-/* PLAYERS */
-.players{
+.grid{
   display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:8px;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
 }
 
-.player{
-  background:rgba(20,20,20,0.9);
-  padding:10px;
-  border-radius:12px;
-  border-left:3px solid var(--primary-light);
-  transition:0.15s ease;
-  min-height:68px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  backdrop-filter:blur(6px);
-  position:relative;
-  overflow:hidden;
-}
-
-.player:hover{
-  transform:translateY(-2px);
-}
-
-.priority{
-  border-left:3px solid #ff4444;
-  box-shadow:0 0 14px rgba(255,0,0,0.18);
-}
-
-/* NEW PLAYER PULSE */
-.player.new::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  border-radius:12px;
-  border:1px solid rgba(255,80,80,0.8);
-  animation:pulse 1.5s ease infinite;
-  pointer-events:none;
-}
-
-@keyframes pulse{
-  0%{
-    opacity:1;
-    transform:scale(1);
-  }
-  70%{
-    opacity:0;
-    transform:scale(1.03);
-  }
-  100%{
-    opacity:0;
-    transform:scale(1.05);
-  }
-}
-
-.name{
-  font-weight:600;
-  font-size:13px;
-  line-height:1.2;
-  word-break:break-word;
-}
-
-.id{
-  margin-top:5px;
-  display:inline-block;
-  padding:4px 8px;
-  background:rgba(90,0,0,0.18);
-  border-radius:999px;
-  font-size:11px;
-  color:#ffb3b3;
-  width:fit-content;
-}
-
-.empty{
+.tag{
+  text-decoration:none;
+  background:rgba(20,20,20,.9);
+  border:1px solid rgba(255,255,255,.05);
+  border-left:4px solid var(--primary-light);
+  border-radius:16px;
+  padding:22px;
+  color:#fff;
   text-align:center;
-  color:var(--muted);
-  padding:30px;
-  grid-column:1 / -1;
+  font-size:20px;
+  font-weight:700;
+  transition:.15s ease;
 }
 
-.footer{
-  text-align:center;
-  margin-top:20px;
-  color:#888;
-  font-size:13px;
-}
-
-/* RESPONSIVE */
-@media(max-width:1200px){
-  .players{
-    grid-template-columns:repeat(4,1fr);
-  }
+.tag:hover{
+  transform:translateY(-3px);
+  background:rgba(30,30,30,.95);
 }
 
 @media(max-width:900px){
-
-  .players{
+  .grid{
     grid-template-columns:repeat(3,1fr);
   }
 }
 
 @media(max-width:700px){
-
   .grid{
-    grid-template-columns:1fr;
-  }
-
-  .players{
     grid-template-columns:repeat(2,1fr);
   }
 }
 
 @media(max-width:500px){
-
-  .players{
+  .grid{
     grid-template-columns:1fr;
   }
 
-  .logo{
-    width:100px;
+  .value{
+    font-size:30px;
   }
 }
 </style>
 </head>
-
 <body>
 
 <div class="container">
 
-  <div class="header">
-    <img src="logo.png" class="logo" alt="Logo">
-  </div>
+  <div class="stats">
+  <a class="stat-card" href="tracker.html?tag=OTHERS">
+    <div class="label">Total Online</div>
+    <div class="value" id="totalOnline">Loading...</div>
+  </a>
+</div>
 
-  <div class="grid">
+<input
+  id="quickSearch"
+  placeholder="🔍 Quick Search Name / ID..."
+  style="
+    width:100%;
+    padding:16px;
+    margin-bottom:15px;
+    border:none;
+    border-radius:16px;
+    background:rgba(20,20,20,.9);
+    color:white;
+    font-size:15px;
+    outline:none;
+  "
+>
 
-    <div class="card">
-      <div class="label">Total Online</div>
-      <div class="big" id="count">0</div>
-    </div>
+<div id="searchResults"></div>
 
-    <div class="card">
-      <div class="label">Date</div>
-      <div class="big" id="date">-</div>
-    </div>
-
-    <div class="card">
-      <div class="label">Last Refresh</div>
-      <div class="big" id="time">-</div>
-    </div>
-
-  </div>
-
-  <div class="search">
-    <input id="search" placeholder="Search player name..." />
-  </div>
-
-  <div class="players" id="players">
-    <div class="empty">Loading...</div>
-  </div>
-
-  <div class="footer">
-    Auto refresh every 5 seconds
-  </div>
+<div class="grid" id="tags"></div>
 
 </div>
 
 <script>
-const API = "https://servers-frontend.fivem.net/api/servers/single/7y66bb";
+const API='https://frontend.cfx-services.net/api/servers/single/7y66bb';
 
-let cache = [];
-
-const priorityPlayers = [
-  "4P | Jebat",
-  "4P | Sood Paragas",
-  "4P | Tukiman"
+let allPlayers = [];
+  
+const tags = [
+'D7',
+'4P',
+'BMS',
+'DRM',
+'HST',
+'69D',
+'302',
+'KPK',
+'KAP',
+'DVX',
+'TTS',
+'CBR',
+'MDS',
+'TRL',
+'BOD',
+'DMF',
+'BBZ',
+'TR',
+'24K',
+'SAINT',
+'PDAB',
+'KKAB',
+'JPJAB'
 ];
 
-/* TRACK NEW PLAYERS */
-const seenPlayers = {};
+document.getElementById('tags').innerHTML = tags.map(tag =>
+`<a class="tag" href="tracker.html?tag=${tag}">${tag}</a>`
+).join('');
 
-function is4P(name){
-  return /4P/i.test(String(name));
+async function loadTotal(){
+  try{
+    const res = await fetch(API,{cache:'no-store'});
+    const data = await res.json();
+
+    const players =
+      data?.Data?.players ||
+      data?.Data?.Players ||
+      data?.Data?.clients ||
+      [];
+
+    allPlayers = players;
+document.getElementById('totalOnline').innerText = players.length;
+
+  }catch(e){
+    console.error(e);
+    document.getElementById('totalOnline').innerText = 'Error';
+  }
 }
 
-function getPlayers(data){
-  return (
-    data?.Data?.players ||
-    data?.Data?.Players ||
-    data?.Data?.clients ||
-    []
-  );
-}
+document.getElementById('quickSearch').addEventListener('input',e=>{
 
-function render(players){
+  const q=e.target.value.toLowerCase().trim();
 
-  const el = document.getElementById("players");
-
-  if(!players.length){
-    el.innerHTML = `<div class='empty'>No 4P players online</div>`;
+  if(!q){
+    document.getElementById('searchResults').innerHTML='';
     return;
   }
 
-  el.innerHTML = players.map(p => {
-
-    const priority = priorityPlayers.includes(p.name);
-
-    return `
-      <div class="player ${priority ? 'priority' : ''} ${p.isNew ? 'new' : ''}">
-        <div class="name">${p.name}</div>
-        <div class="id">ID: ${p.id ?? 'N/A'}</div>
-      </div>
-    `;
-  }).join('');
-}
-
-async function load(){
-
-  try{
-
-    const res = await fetch(API, { cache:"no-store" });
-
-    const data = await res.json();
-
-    const playersRaw = getPlayers(data);
-
-    const filtered = playersRaw
-
-      .map(p => ({
-        name: p.name || p,
-        id: p.id || "N/A"
-      }))
-
-      .filter(p => is4P(p.name))
-
-      .map(p => {
-
-        const isNew = !seenPlayers[p.name];
-
-        seenPlayers[p.name] = true;
-
-        return {
-          ...p,
-          isNew
-        };
-      })
-
-      .sort((a,b) => {
-
-        const aPriority = priorityPlayers.includes(a.name);
-        const bPriority = priorityPlayers.includes(b.name);
-
-        if(aPriority && !bPriority) return -1;
-        if(!aPriority && bPriority) return 1;
-
-        return a.name.localeCompare(b.name);
-      });
-
-    cache = filtered;
-
-    document.getElementById("count").innerText = filtered.length;
-
-    document.getElementById("time").innerText =
-      new Date().toLocaleTimeString();
-
-    const d = new Date();
-
-    const months = [
-      "Jan","Feb","Mar","Apr","May","Jun",
-      "Jul","Aug","Sep","Oct","Nov","Dec"
-    ];
-
-    document.getElementById("date").innerText =
-      d.getDate() + " " + months[d.getMonth()];
-
-    render(filtered);
-
-  }catch(e){
-
-    console.error(e);
-
-    document.getElementById("players").innerHTML =
-      `<div class='empty'>Failed to load data</div>`;
-  }
-}
-
-document.getElementById("search").addEventListener("input", e => {
-
-  const val = e.target.value.toLowerCase();
-
-  render(
-    cache.filter(p =>
-      p.name.toLowerCase().includes(val)
-    )
+  const results=allPlayers.filter(p=>
+    String(p.name||'').toLowerCase().includes(q) ||
+    String(p.id||'').includes(q)
   );
+
+  document.getElementById('searchResults').innerHTML=
+    results.slice(0,20).map(p=>`
+      <div style="
+        background:rgba(20,20,20,.9);
+        padding:12px;
+        margin-bottom:6px;
+        border-radius:12px;
+        border-left:4px solid #7A1111;
+      ">
+        <b>${p.name||'Unknown'}</b><br>
+        ID: ${p.id||'N/A'}
+      </div>
+    `).join('');
 });
 
-load();
-
-setInterval(load, 5000);
+loadTotal();
+setInterval(loadTotal,5000);
 </script>
 
 </body>
